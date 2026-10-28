@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: saansathi
+    runtime: node
+    plan: free
+    buildCommand: node --check server.mjs && node --check app.js
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NEBIUS_API_KEY
+        sync: false
+      - key: NEBIUS_BASE_URL
+        value: https://api.tokenfactory.nebius.com/v1
+      - key: NEBIUS_MODEL
+        value: nvidia/Nemotron-3_5-Lightning

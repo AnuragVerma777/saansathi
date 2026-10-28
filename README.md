@@ -18,6 +18,7 @@ Saansathi is a respiratory-care navigation prototype. It helps people organize s
 
 | Feature | What it does | Boundary |
 | --- | --- | --- |
+| Project introduction | Explains the problem, three-step flow, and optional AI stack before the interactive demo | Clearly labels whether Nebius inference is connected or the app is in offline mode |
 | Guided check-in | Select symptoms, duration, and optional context | Organizes user-provided information; does not assess or score it |
 | Visit preparation | Creates a concise clinician-facing summary and questions | Never adds symptoms or diagnostic conclusions |
 | Ask Saansathi | Gives general respiratory-care guidance; uses Nemotron when Nebius is connected | Offline demo uses prepared example responses; not a clinician or emergency service |

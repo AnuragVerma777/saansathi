@@ -8,7 +8,7 @@
 
 ## 90-second video walkthrough
 
-1. **Introduce the purpose:** Saansathi helps people prepare for a respiratory-care conversation. It does not diagnose or screen for a disease.
+1. **Start on the introduction screen:** Explain the problem, audience, three-step flow, and the visible connection status. Select **Explore the demo** to continue.
 2. **Show the guided check-in:** Choose `Cough` and `Congestion`, select `A few days`, then add a short note such as “mostly at night.” Use only fictional, non-identifying demo details.
 3. **Generate visit notes:** Show the concise summary with the supplied symptoms and duration. Explain that the guide helps prepare information to share with a clinician.
 4. **Show Q&A:** Tap a suggested question and point out the next-step guidance. If a model API is configured, describe this as Nemotron-powered; if the header says **Offline demo**, explain that it is a prepared example response and skip model claims.

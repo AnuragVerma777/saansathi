@@ -197,62 +197,93 @@ if __name__ == "__main__":
         [data-testid="stMarkdownContainer"] p{font-size:16px;color:#b4c4bc}
         h1,h2,h3{color:#e6f1ec!important} .stButton>button{background:#35c394;color:#071912;border:0;min-height:44px;font-weight:700}
         .stTextArea textarea,.stTextInput input{background:#0e1719;color:#e2eee8}
+        .hero-kicker{color:#69d9aa;letter-spacing:.14em;font-size:.82rem;font-weight:700}
+        .hero-copy{max-width:720px;font-size:1.15rem;line-height:1.7;color:#b4c4bc}
+        .demo-status{color:#8fa69b;font-size:.9rem}
         </style>
         """, unsafe_allow_html=True)
         configured = bool(os.getenv("NEBIUS_API_KEY")) and os.getenv("SAANSATHI_DEMO_MODE", "").lower() != "true"
         with st.sidebar:
             st.title("✳ Saansathi")
-            st.caption("YOUR SPACE")
-            st.markdown("Overview  ·  Symptom check-in  ·  Ask Saansathi")
-            st.divider()
-            st.markdown("**Your space is yours**\n\nYour notes are not saved. Skip names and personal details.")
-            st.divider()
+            if st.session_state.get("view", "intro") == "app":
+                if st.button("← Project intro"):
+                    st.session_state.view = "intro"
+                    st.rerun()
+                st.divider()
+                st.markdown("**Your space is yours**\n\nYour notes are not saved. Skip names and personal details.")
             st.caption(f"🟢 {MODEL} · connected" if configured else "🟢 Offline demo · no billing needed")
-        st.caption("A LITTLE MORE CLARITY")
-        st.title("Your next step, at your pace.")
-        st.write("Organize what you’re feeling and prepare for a care conversation, one small step at a time.")
-        st.divider()
-        checkin_col, help_col = st.columns([1.7, 1])
-        with checkin_col:
-            st.subheader("01 · Your check-in")
-            st.write("Share only what you’re comfortable with. This helps organize your thoughts, not diagnose a condition.")
-            with st.form("checkin"):
-                st.markdown("**What have you noticed?**")
-                symptoms = ["Cough", "Shortness of breath", "Wheezing", "Chest discomfort", "Congestion", "Sore throat", "Fever", "Fatigue"]
-                selected = [item for item in symptoms if st.checkbox(item, key=f"symptom_{item}")]
-                note = st.text_area("Anything else you’d like to note?", max_chars=2000, placeholder="For example: It feels worse at night…")
-                duration = st.selectbox("How long has this been happening?", ["", "Today", "A few days", "About a week", "More than two weeks", "It comes and goes"])
-                submitted = st.form_submit_button("Make my care notes")
-            if submitted:
-                details = ", ".join(selected + ([note.strip()] if note.strip() else []))
-                if duration:
-                    details += f" (Duration: {duration})"
-                if not details:
-                    st.info("Choose a symptom or add a short note first.")
+        if st.session_state.get("view", "intro") == "intro":
+            st.markdown('<div class="hero-kicker">RESPIRATORY CARE NAVIGATION</div>', unsafe_allow_html=True)
+            st.title("A clearer next step starts with being heard.")
+            st.markdown('<div class="hero-copy">Saansathi helps people organize respiratory symptoms and prepare useful notes and questions for a clinician—without trying to diagnose them.</div>', unsafe_allow_html=True)
+            st.write("")
+            if st.button("Explore the demo  →", type="primary"):
+                st.session_state.view = "app"
+                st.rerun()
+            st.markdown(f'<p class="demo-status">{"Nemotron connected through Nebius Token Factory" if configured else "Offline demo · no Nebius billing needed"}</p>', unsafe_allow_html=True)
+            st.divider()
+            cards = st.columns(3)
+            with cards[0]:
+                with st.container(border=True):
+                    st.markdown("**01 · Check in**")
+                    st.caption("Choose symptoms and note how long they have been happening.")
+            with cards[1]:
+                with st.container(border=True):
+                    st.markdown("**02 · Prepare**")
+                    st.caption("Turn the details you supplied into a simple starting point for a clinician visit.")
+            with cards[2]:
+                with st.container(border=True):
+                    st.markdown("**03 · Find a next step**")
+                    st.caption("Ask a general question and see clear urgent-care boundaries.")
+            st.write("")
+            st.caption("BUILT WITH PYTHON + STREAMLIT  ·  OPTIONAL NVIDIA NEMOTRON VIA NEBIUS TOKEN FACTORY")
+            st.caption("General education only. Not a diagnosis or a substitute for professional care.")
+        else:
+            st.caption("A LITTLE MORE CLARITY")
+            st.title("Your next step, at your pace.")
+            st.write("Organize what you’re feeling and prepare for a care conversation, one small step at a time.")
+            st.divider()
+            checkin_col, help_col = st.columns([1.7, 1])
+            with checkin_col:
+                st.subheader("01 · Your check-in")
+                st.write("Share only what you’re comfortable with. This helps organize your thoughts, not diagnose a condition.")
+                with st.form("checkin"):
+                    st.markdown("**What have you noticed?**")
+                    symptoms = ["Cough", "Shortness of breath", "Wheezing", "Chest discomfort", "Congestion", "Sore throat", "Fever", "Fatigue"]
+                    selected = [item for item in symptoms if st.checkbox(item, key=f"symptom_{item}")]
+                    note = st.text_area("Anything else you’d like to note?", max_chars=2000, placeholder="For example: It feels worse at night…")
+                    duration = st.selectbox("How long has this been happening?", ["", "Today", "A few days", "About a week", "More than two weeks", "It comes and goes"])
+                    submitted = st.form_submit_button("Make my care notes")
+                if submitted:
+                    details = ", ".join(selected + ([note.strip()] if note.strip() else []))
+                    if duration:
+                        details += f" (Duration: {duration})"
+                    if not details:
+                        st.info("Choose a symptom or add a short note first.")
+                    else:
+                        answer, urgent = guide("Help me make a brief, neutral summary I can share with a clinician. Include only the symptoms and duration I gave you; do not infer a diagnosis.", details)
+                        (st.error if urgent else st.success)(answer)
+            with help_col:
+                st.subheader("Your next step")
+                st.markdown("Start with what you already know. A rough note about when things started and what changed is a good beginning.")
+                st.warning("**Need urgent help?** If you’re struggling to breathe, have severe chest pain, feel faint, or notice blue lips, seek emergency care now.")
+            st.divider()
+            st.subheader("02 · Ask Saansathi")
+            st.write("Get general information or help figuring out what to ask a clinician. Saansathi cannot diagnose or replace a care professional.")
+            with st.form("ask"):
+                question = st.text_area("Your question", max_chars=2000, placeholder="Ask about your next step…")
+                left, right = st.columns([1, 1])
+                with left:
+                    language = st.selectbox("Reply language", ["English", "Bahasa Indonesia"])
+                with right:
+                    ask_submitted = st.form_submit_button("Ask Saansathi")
+            if ask_submitted:
+                if not question.strip():
+                    st.info("Add a question first.")
                 else:
-                    answer, urgent = guide("Help me make a brief, neutral summary I can share with a clinician. Include only the symptoms and duration I gave you; do not infer a diagnosis.", details)
-                    (st.error if urgent else st.success)(answer)
-        with help_col:
-            st.subheader("Your next step")
-            st.markdown("Start with what you already know. A rough note about when things started and what changed is a good beginning.")
-            st.warning("**Need urgent help?** If you’re struggling to breathe, have severe chest pain, feel faint, or notice blue lips, seek emergency care now.")
-        st.divider()
-        st.subheader("02 · Ask Saansathi")
-        st.write("Get general information or help figuring out what to ask a clinician. Saansathi cannot diagnose or replace a care professional.")
-        with st.form("ask"):
-            question = st.text_area("Your question", max_chars=2000, placeholder="Ask about your next step…")
-            left, right = st.columns([1, 1])
-            with left:
-                language = st.selectbox("Reply language", ["English", "Bahasa Indonesia"])
-            with right:
-                ask_submitted = st.form_submit_button("Ask Saansathi")
-        if ask_submitted:
-            if not question.strip():
-                st.info("Add a question first.")
-            else:
-                answer, urgent = guide(question.strip(), "", language)
-                (st.error if urgent else st.info)(answer)
-        st.caption("Saansathi is a care-navigation demo, not a medical service. For ongoing or worsening symptoms, contact a qualified clinician.")
+                    answer, urgent = guide(question.strip(), "", language)
+                    (st.error if urgent else st.info)(answer)
+            st.caption("Saansathi is a care-navigation demo, not a medical service. For ongoing or worsening symptoms, contact a qualified clinician.")
     else:
         port = int(os.getenv("PORT", "3000"))
         server = ThreadingHTTPServer(("0.0.0.0", port), Handler)

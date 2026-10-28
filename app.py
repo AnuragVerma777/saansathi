@@ -106,7 +106,7 @@ def guide(message: str, details: str, language: str = "English") -> tuple[str, b
 def page(result: str = "", urgent: bool = False, selected: list[str] | None = None,
          note: str = "", duration: str = "", question: str = "", language: str = "English") -> bytes:
     selected = selected or []
-    status = "Offline demo · no billing needed" if not os.getenv("NEBIUS_API_KEY") or os.getenv("SAANSATHI_DEMO_MODE", "").lower() == "true" else f"{esc(MODEL)} · connected"
+    status = "Demo mode · sample responses" if not os.getenv("NEBIUS_API_KEY") or os.getenv("SAANSATHI_DEMO_MODE", "").lower() == "true" else f"{esc(MODEL)} · connected"
     checks = ["Cough", "Shortness of breath", "Wheezing", "Chest discomfort", "Congestion", "Sore throat", "Fever", "Fatigue"]
     choices = "".join(
         f'<label class="chip"><input type="checkbox" name="symptom" value="{esc(item)}"{" checked" if item in selected else ""}><span>{esc(item)}</span></label>'
@@ -211,7 +211,7 @@ if __name__ == "__main__":
                     st.rerun()
                 st.divider()
                 st.markdown("**Your space is yours**\n\nYour notes are not saved. Skip names and personal details.")
-            st.caption(f"🟢 {MODEL} · connected" if configured else "🟢 Offline demo · no billing needed")
+            st.caption(f"🟢 {MODEL} · connected" if configured else "🟢 Demo mode · sample responses")
         if st.session_state.get("view", "intro") == "intro":
             st.markdown('<div class="hero-kicker">RESPIRATORY CARE NAVIGATION</div>', unsafe_allow_html=True)
             st.title("A clearer next step starts with being heard.")
@@ -220,7 +220,7 @@ if __name__ == "__main__":
             if st.button("Explore the demo  →", type="primary"):
                 st.session_state.view = "app"
                 st.rerun()
-            st.markdown(f'<p class="demo-status">{"Nemotron connected through Nebius Token Factory" if configured else "Offline demo · no Nebius billing needed"}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="demo-status">{"Nemotron connected through Nebius Token Factory" if configured else "Demo mode · sample responses"}</p>', unsafe_allow_html=True)
             st.divider()
             cards = st.columns(3)
             with cards[0]:

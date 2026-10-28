@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     autoDeployTrigger: off
-    buildCommand: node --check server.mjs && node --check app.js
+    buildCommand: node --check server/server.mjs && node --check public/app.js
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:

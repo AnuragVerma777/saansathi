@@ -5,8 +5,8 @@
   "description": "A respiratory care navigation demo powered by NVIDIA Nemotron on Nebius Token Factory.",
   "type": "module",
   "scripts": {
-    "start": "node server.mjs",
-    "dev": "node --watch server.mjs"
+    "start": "node server/server.mjs",
+    "dev": "node --watch server/server.mjs"
   },
   "engines": { "node": ">=20" }
 }

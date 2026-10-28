@@ -1,9 +1,10 @@
 import { createServer } from 'node:http';
 import { readFile, access } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('.', import.meta.url));
+const root = fileURLToPath(new URL('../', import.meta.url));
+const publicRoot = join(root, 'public');
 try {
   const env = await readFile(join(root, '.env'), 'utf8');
   for (const line of env.split(/\r?\n/)) {
@@ -68,9 +69,9 @@ const server = createServer(async (req, res) => {
   }
   if (req.method !== 'GET' && req.method !== 'HEAD') return reply(res, 405, { error: 'Method not allowed.' });
   let pathname = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname);
-  pathname = normalize(pathname).replace(/^([.][.][/\\])+/, '');
-  const path = join(root, pathname);
-  if (!path.startsWith(root)) return reply(res, 403, { error: 'Forbidden.' });
+  pathname = normalize(pathname);
+  const path = resolve(publicRoot, `.${pathname}`);
+  if (path !== publicRoot && !path.startsWith(publicRoot + sep)) return reply(res, 403, { error: 'Forbidden.' });
   try {
     await access(path);
     const body = await readFile(path);

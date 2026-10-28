@@ -56,7 +56,7 @@ The server keeps `NEBIUS_API_KEY` out of browser code. The browser does not send
 | Layer | Technology | Role |
 | --- | --- | --- |
 | Interface | Python-rendered HTML, CSS | Responsive server-rendered check-in and Q&A; no browser JavaScript |
-| Server | Python 3.10+, standard library | HTTP server, HTML rendering, input limits, emergency phrase handling, provider proxy |
+| Server | Python 3.10+, standard library; Streamlit for Streamlit Cloud | Local HTTP mode and Streamlit Cloud UI, input limits, emergency phrase handling, provider proxy |
 | Model API | Nebius Token Factory, OpenAI-compatible chat completions | Serves the configured NVIDIA Nemotron model |
 | Hosting | Render Web Service Blueprint | One-click deploy configuration in `render.yaml` |
 
@@ -66,7 +66,7 @@ The server keeps `NEBIUS_API_KEY` out of browser code. The browser does not send
 saansathi/
 ├── README.md                 # Overview, diagrams, setup, and feature tables
 ├── app.py                    # Python web app, forms, demo guide, and Nebius proxy
-├── requirements.txt          # No third-party packages required
+├── requirements.txt          # Streamlit dependency for Streamlit Cloud
 ├── .env.example              # Local configuration template (no real key)
 ├── .gitignore                # Excludes .env and generated files
 ├── render.yaml               # Render service and secret-variable configuration
@@ -79,11 +79,13 @@ saansathi/
 
 ## Run locally
 
-**Requirements:** Python 3.10 or newer. No dependency installation is required.
+**Requirements:** Python 3.10 or newer. Local HTTP mode uses the standard library; install Streamlit only if you want to run the Streamlit interface locally.
 
 ```powershell
 python app.py
 ```
+
+For Streamlit Cloud compatibility, select `app.py` as the app entrypoint. Streamlit is installed from `requirements.txt`. The same file supports both Streamlit Cloud and the local `python app.py` server.
 
 Open [http://localhost:3000](http://localhost:3000). Without an API key, the app runs in offline demo mode with prepared example responses and emergency phrase handling. These examples are not AI-generated. To use Nebius, set `NEBIUS_API_KEY` in `.env`; the key stays server-side. Never commit `.env` or paste the key into chat. Nebius responses require an enabled account and API key.
 

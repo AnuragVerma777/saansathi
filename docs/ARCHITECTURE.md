@@ -1,6 +1,6 @@
 # Architecture
 
-Saansathi is a single Python web service that renders HTML and handles form submissions server-side. It has no database, login, browser-side JavaScript, audio capture, or clinical scoring service.
+Saansathi supports a local Python standard-library HTTP server and a Streamlit Cloud interface, both implemented in Python. It has no database, login, browser-side JavaScript, audio capture, or clinical scoring service.
 
 ## Request flow
 
@@ -31,7 +31,7 @@ sequenceDiagram
 
 | Component | Location | Responsibility |
 | --- | --- | --- |
-| Web app | `app.py` | Renders pages, handles symptom/Q&A forms, loads local `.env`, checks emergencies, proxies optional model calls |
+| Web app | `app.py` | Renders the local page or Streamlit UI, handles symptom/Q&A forms, loads local `.env`, checks emergencies, proxies optional model calls |
 | Styling | `public/styles.css` | Dark responsive UI and readable type scale |
 | Provider configuration | `.env` locally; host environment in deployment | Supplies API base URL, key, model, and port |
 | Render service | `render.yaml` | Describes the Node web service and prompts for `NEBIUS_API_KEY` as a secret |

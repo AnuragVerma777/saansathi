@@ -1,1 +1,2 @@
-# Saansathi uses only the Python standard library.
+# Streamlit Cloud uses Streamlit; the local Python HTTP mode uses only stdlib.
+streamlit>=1.41,<2

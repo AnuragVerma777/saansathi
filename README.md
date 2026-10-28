@@ -8,6 +8,8 @@ The interface uses a dark, low-light visual system with a responsive mobile layo
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi)
 
+**Try the demo on Render:** [Open Saansathi](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi)
+
 Saansathi is inspired by the broad community-health motivation behind Jaga, while taking a different product approach: it does not record or classify cough audio, calculate risk, triage people into categories, screen for TB, or offer a diagnosis. It helps people prepare for a care conversation. The application is a prototype, not a medical service.
 
 ## Run locally

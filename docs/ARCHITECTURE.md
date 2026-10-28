@@ -34,7 +34,7 @@ sequenceDiagram
 | Web app | `app.py` | Renders the local page or Streamlit UI, handles symptom/Q&A forms, loads local `.env`, checks emergencies, proxies optional model calls |
 | Styling | `public/styles.css` | Dark responsive UI and readable type scale |
 | Provider configuration | `.env` locally; host environment in deployment | Supplies API base URL, key, model, and port |
-| Render service | `render.yaml` | Describes the Node web service and prompts for `NEBIUS_API_KEY` as a secret |
+| Hosted deployment | Streamlit Community Cloud | Runs the Python app using dependencies from `requirements.txt` |
 
 ## API contract
 

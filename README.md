@@ -10,13 +10,7 @@
   <a href="#project-structure">Project structure</a>
 </p>
 
-<p align="center">
-  <a href="https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi">
-    <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy Saansathi to Render">
-  </a>
-</p>
-
-**Live demo:** [Open Saansathi](https://saansathi-ypc83mz5xbocxdu9xmoedv.streamlit.app/). The demo runs without Nebius billing in offline mode; Nebius-powered answers require an API key and account billing. To host your own Render copy, use [Deploy to Render](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi).
+**Live demo:** [Open Saansathi on Streamlit](https://saansathi-ypc83mz5xbocxdu9xmoedv.streamlit.app/). The demo runs in offline mode without Nebius billing; Nemotron-powered answers need a configured Nebius API key.
 
 Saansathi is a respiratory-care navigation prototype. It helps people organize symptoms, prepare neutral notes for a clinician, and ask general questions. It is not a medical service and does not screen for TB, diagnose, calculate risk, or replace professional care.
 
@@ -58,7 +52,7 @@ The server keeps `NEBIUS_API_KEY` out of browser code. The browser does not send
 | Interface | Python-rendered HTML, CSS | Responsive server-rendered check-in and Q&A; no browser JavaScript |
 | Server | Python 3.10+, standard library; Streamlit for Streamlit Cloud | Local HTTP mode and Streamlit Cloud UI, input limits, emergency phrase handling, provider proxy |
 | Model API | Nebius Token Factory, OpenAI-compatible chat completions | Serves the configured NVIDIA Nemotron model |
-| Hosting | Render Web Service Blueprint | One-click deploy configuration in `render.yaml` |
+| Hosting | Streamlit Community Cloud | Public hosted demo |
 
 ## Project structure
 
@@ -69,7 +63,6 @@ saansathi/
 ├── requirements.txt          # Streamlit dependency for Streamlit Cloud
 ├── .env.example              # Local configuration template (no real key)
 ├── .gitignore                # Excludes .env and generated files
-├── render.yaml               # Render service and secret-variable configuration
 ├── public/
 │   └── styles.css            # Dark responsive design system
 └── docs/
@@ -110,13 +103,9 @@ To force the free offline demo even when a key exists in `.env`, start the serve
 
 The Python server offers HTML forms at `/checkin` and `/ask`, plus `GET /api/health`. It limits request size and does not persist request bodies.
 
-## Deploy to Render
+## Live demo
 
-1. Click **Deploy to Render** above and sign in to Render.
-2. Review the Blueprint. Enter your Nebius key directly into Render's `NEBIUS_API_KEY` secret field.
-3. Deploy. Render provides a public `onrender.com` service URL after the build completes.
-
-The free plan may sleep while idle, so the first request after inactivity may take longer. For hosted-demo setup details, see [Render's Blueprint guide](https://render.com/docs/blueprint-spec) and the [Deploy to Render button documentation](https://render.com/docs/deploy-to-render).
+Open the [Saansathi Streamlit demo](https://saansathi-ypc83mz5xbocxdu9xmoedv.streamlit.app/). It can run in offline mode without a Nebius key. To enable live Nemotron responses, configure `NEBIUS_API_KEY` in Streamlit Cloud secrets.
 
 ## Demo flow
 

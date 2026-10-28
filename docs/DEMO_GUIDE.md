@@ -18,9 +18,9 @@
 ## Setup before presenting
 
 - For an offline recording, start with `$env:SAANSATHI_DEMO_MODE='true'; python app.py`; no API key or billing is needed. Confirm the app header says **Offline demo**.
-- For actual Nemotron responses, configure `NEBIUS_API_KEY` in local `.env` or Render's secret environment variables, then confirm `/api/health` reports `configured: true`.
+- For actual Nemotron responses, configure `NEBIUS_API_KEY` in local `.env` or Streamlit Cloud secrets.
 - Keep example input fictional; do not use real patient details.
-- If presenting the Render-hosted copy, wake the free service before the demo because it can sleep while idle.
+- Open the hosted [Streamlit demo](https://saansathi-ypc83mz5xbocxdu9xmoedv.streamlit.app/) before recording and allow time for it to load.
 
 ## Suggested narration
 

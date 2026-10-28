@@ -1,12 +1,12 @@
 services:
   - type: web
     name: saansathi-anurag-demo
-    runtime: node
+    runtime: python
     plan: free
     autoDeployTrigger: off
-    buildCommand: node --check server/server.mjs && node --check public/app.js
-    startCommand: npm start
-    healthCheckPath: /api/health
+    buildCommand: python -m py_compile app.py
+    startCommand: python app.py
+    healthCheckPath: /
     envVars:
       - key: NEBIUS_API_KEY
         sync: false

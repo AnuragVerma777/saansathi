@@ -16,7 +16,7 @@
   </a>
 </p>
 
-**Try demo on Render:** [Open the Render setup](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi). This creates a hosted copy in your Render account; a shared public instance has not been deployed yet. Render needs a Nebius API key before AI features can respond.
+**Demo:** [Run the free offline demo locally](docs/DEMO_GUIDE.md#setup-before-presenting) without a Nebius key. To host your own copy, use [Deploy to Render](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi); this opens Render setup in your account. There is no shared public instance URL yet. Nebius-powered answers require an API key and account billing.
 
 Saansathi is a respiratory-care navigation prototype. It helps people organize symptoms, prepare neutral notes for a clinician, and ask general questions. It is not a medical service and does not screen for TB, diagnose, calculate risk, or replace professional care.
 
@@ -26,21 +26,21 @@ Saansathi is a respiratory-care navigation prototype. It helps people organize s
 | --- | --- | --- |
 | Guided check-in | Select symptoms, duration, and optional context | Organizes user-provided information; does not assess or score it |
 | Visit preparation | Creates a concise clinician-facing summary and questions | Never adds symptoms or diagnostic conclusions |
-| Ask Saansathi | Answers general respiratory-care questions with Nemotron | General education only; not a clinician or emergency service |
+| Ask Saansathi | Gives general respiratory-care guidance; uses Nemotron when Nebius is connected | Offline demo uses prepared example responses; not a clinician or emergency service |
 | English / Bahasa Indonesia | Choose the language for model replies | UI labels are currently in English |
 | Urgent-help guidance | Recognizes a small set of emergency phrases and shows immediate guidance | A demo keyword rule; not a validated safety system |
-| Private by default | No account or database; notes remain in page memory | Text sent for AI assistance goes to the configured Nebius endpoint |
-| Responsive dark UI | High-contrast dark theme for desktop and mobile | Requires a modern browser with JavaScript enabled |
+| Private by default | No account or database; submissions are not saved | Text sent for AI assistance goes to the configured Nebius endpoint |
+| Responsive dark UI | High-contrast dark theme for desktop and mobile | Requires a modern browser |
 
 ## How it works
 
 ```mermaid
 flowchart LR
     U[Person using the browser] --> UI[Responsive Saansathi UI]
-    UI -->|GET /api/health| API[Node.js server]
-    UI -->|POST /api/guide| API
+    UI -->|HTML forms| API[Python standard-library server]
+    UI -->|GET /api/health| API
     API -->|Emergency phrase match| SAFE[Immediate emergency guidance]
-    API -->|No API key| CONFIG[Configuration message]
+    API -->|No API key| CONFIG[Offline prepared demo response]
     API -->|Bearer key + prompt| NEB[Nebius Token Factory]
     NEB --> MODEL[NVIDIA Nemotron]
     MODEL -->|General guidance / visit notes| API
@@ -55,8 +55,8 @@ The server keeps `NEBIUS_API_KEY` out of browser code. The browser does not send
 
 | Layer | Technology | Role |
 | --- | --- | --- |
-| Interface | HTML, CSS, browser JavaScript | Responsive check-in, Q&A, copyable visit notes |
-| Server | Node.js 20+, built-in HTTP and `fetch` | Static files, input limits, emergency phrase shortcut, provider proxy |
+| Interface | Python-rendered HTML, CSS | Responsive server-rendered check-in and Q&A; no browser JavaScript |
+| Server | Python 3.10+, standard library | HTTP server, HTML rendering, input limits, emergency phrase handling, provider proxy |
 | Model API | Nebius Token Factory, OpenAI-compatible chat completions | Serves the configured NVIDIA Nemotron model |
 | Hosting | Render Web Service Blueprint | One-click deploy configuration in `render.yaml` |
 
@@ -65,16 +65,13 @@ The server keeps `NEBIUS_API_KEY` out of browser code. The browser does not send
 ```text
 saansathi/
 ├── README.md                 # Overview, diagrams, setup, and feature tables
-├── package.json              # Start and development commands
+├── app.py                    # Python web app, forms, demo guide, and Nebius proxy
+├── requirements.txt          # No third-party packages required
 ├── .env.example              # Local configuration template (no real key)
 ├── .gitignore                # Excludes .env and generated files
 ├── render.yaml               # Render service and secret-variable configuration
 ├── public/
-│   ├── index.html            # Main responsive interface
-│   ├── styles.css            # Dark design system and readable type scale
-│   └── app.js                # Check-in, Q&A, and browser interactions
-├── server/
-│   └── server.mjs            # Static server and Nebius API proxy
+│   └── styles.css            # Dark responsive design system
 └── docs/
     ├── ARCHITECTURE.md       # Data flow and API contract
     └── DEMO_GUIDE.md         # Short presenter walkthrough
@@ -82,15 +79,15 @@ saansathi/
 
 ## Run locally
 
-**Requirements:** Node.js 20 or newer. No dependency installation is required.
+**Requirements:** Python 3.10 or newer. No dependency installation is required.
 
 ```powershell
-Copy-Item .env.example .env
-notepad .env
-npm start
+python app.py
 ```
 
-Set `NEBIUS_API_KEY` in `.env`, save, and open [http://localhost:3000](http://localhost:3000). The key stays on the server. Never commit `.env` or paste the key into chat. If no key is configured, the page loads and the emergency phrase shortcut still works, but model responses are unavailable.
+Open [http://localhost:3000](http://localhost:3000). Without an API key, the app runs in offline demo mode with prepared example responses and emergency phrase handling. These examples are not AI-generated. To use Nebius, set `NEBIUS_API_KEY` in `.env`; the key stays server-side. Never commit `.env` or paste the key into chat. Nebius responses require an enabled account and API key.
+
+To force the free offline demo even when a key exists in `.env`, start the server with `SAANSATHI_DEMO_MODE=true` in its environment. For PowerShell: `$env:SAANSATHI_DEMO_MODE='true'; python app.py`.
 
 ### Configuration
 
@@ -109,7 +106,7 @@ Set `NEBIUS_API_KEY` in `.env`, save, and open [http://localhost:3000](http://lo
 | `POST` | `/api/guide` | Accepts a question or symptom notes and returns guidance or visit-prep text |
 | `GET` | `/` | Serves the web app |
 
-Request fields for `/api/guide`: `message` (question), `details` (optional check-in), and `language` (`English` or `Bahasa Indonesia`). The server limits request size and does not persist request bodies.
+The Python server offers HTML forms at `/checkin` and `/ask`, plus `GET /api/health`. It limits request size and does not persist request bodies.
 
 ## Deploy to Render
 
@@ -123,10 +120,10 @@ The free plan may sleep while idle, so the first request after inactivity may ta
 
 1. Choose a few symptom chips and a duration; add a brief, non-identifying note.
 2. Generate the visit-preparation summary and copy it.
-3. Ask a suggested question, then switch the reply language to Bahasa Indonesia.
+3. Ask a suggested question and show the next-step guidance. Mention Nemotron only if the app header reports it connected.
 4. Open **See urgent signs** to show the emergency-help guidance.
 
-A concise presenter script is in [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md).
+The video intro, narration, and shot-by-shot presenter script are in [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md).
 
 ## Safety and privacy
 

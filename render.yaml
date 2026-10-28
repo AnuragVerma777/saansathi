@@ -1,8 +1,9 @@
 services:
   - type: web
-    name: saansathi
+    name: saansathi-anurag-demo
     runtime: node
     plan: free
+    autoDeployTrigger: off
     buildCommand: node --check server.mjs && node --check app.js
     startCommand: npm start
     healthCheckPath: /api/health

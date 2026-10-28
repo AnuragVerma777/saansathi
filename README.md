@@ -4,7 +4,9 @@
 
 The interface uses a dark, low-light visual system with a responsive mobile layout, guided symptom chips, and English or Bahasa Indonesia AI replies.
 
-**Live demo:** This workspace is ready to deploy on Render, but does not have a public URL yet. After you connect this repository to Render and deploy, add the generated `https://<service-name>.onrender.com` URL here.
+**Live demo:** A shared public instance still needs to be deployed. You can create a hosted copy from this repository with the button below; Render will ask you for a Nebius Token Factory API key before enabling AI responses.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi)
 
 Saansathi is inspired by the broad community-health motivation behind Jaga, while taking a different product approach: it does not record or classify cough audio, calculate risk, triage people into categories, screen for TB, or offer a diagnosis. It helps people prepare for a care conversation. The application is a prototype, not a medical service.
 
@@ -61,11 +63,10 @@ The API key is required for AI responses. The interface explains when the key is
 
 The root [`render.yaml`](./render.yaml) is a Render Blueprint for the Node web service. To publish:
 
-1. Push this project to a GitHub repository.
-2. In Render, choose **New → Blueprint** and connect that repository.
-3. Enter your Nebius Token Factory API key when Render requests `NEBIUS_API_KEY`; keep it in Render's environment settings, never in GitHub.
-4. Deploy. Render will provide a public `onrender.com` address. Put that URL in the **Live demo** section above and in your hackathon submission.
+1. Click the **Deploy to Render** button above and sign in to Render.
+2. Review the Saansathi web service and enter your Nebius Token Factory API key for `NEBIUS_API_KEY`; keep it in Render's environment settings, never in GitHub.
+3. Deploy. Render will provide a public `onrender.com` address you can share with demo users.
 
-The free service may spin down while idle, so its first request after a quiet period can take longer. The project is ready for deployment; this workspace does not have a connected GitHub repository or Render account, so no public URL has been created yet. See [Render's Blueprint reference](https://render.com/docs/blueprint-spec) for the deployment configuration format.
+The free service may spin down while idle, so its first request after a quiet period can take longer. No shared public URL has been created yet. See [Render's Deploy to Render guide](https://render.com/docs/deploy-to-render) for details about the one-click button and [Blueprint reference](https://render.com/docs/blueprint-spec) for the service configuration.
 
 Use HTTPS and review the hosting provider's request logging and data retention before sharing the app publicly.

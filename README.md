@@ -16,7 +16,7 @@
   </a>
 </p>
 
-**Demo:** [Run the free offline demo locally](docs/DEMO_GUIDE.md#setup-before-presenting) without a Nebius key. To host your own copy, use [Deploy to Render](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi); this opens Render setup in your account. There is no shared public instance URL yet. Nebius-powered answers require an API key and account billing.
+**Live demo:** [Open Saansathi](https://saansathi-ypc83mz5xbocxdu9xmoedv.streamlit.app/). The demo runs without Nebius billing in offline mode; Nebius-powered answers require an API key and account billing. To host your own Render copy, use [Deploy to Render](https://render.com/deploy?repo=https://github.com/AnuragVerma777/saansathi).
 
 Saansathi is a respiratory-care navigation prototype. It helps people organize symptoms, prepare neutral notes for a clinician, and ask general questions. It is not a medical service and does not screen for TB, diagnose, calculate risk, or replace professional care.
 
